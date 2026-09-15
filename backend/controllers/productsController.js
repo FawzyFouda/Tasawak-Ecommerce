@@ -19,7 +19,7 @@ exports.getAllProducts = async (req, res, next) => {
 }
 exports.getProduct = async (req, res, next) => {
     try {
-        const [product] = await db.query('SELECT * from PRODUCTS WHERE id = ?',[req.params.id])
+        const [product] = await db.query('SELECT * from PRODUCTS WHERE id = ?', [req.params.id])
         if (product.length === 0) {
             return res.json({
                 success: true,
@@ -32,5 +32,13 @@ exports.getProduct = async (req, res, next) => {
 
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+exports.getCart = async (req, res, next) => {
+    try {
+       
+    } catch (error) {
+        
     }
 }

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import { SlidersHorizontal } from 'lucide-react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import {  SlidersHorizontal } from 'lucide-react';
+import { useState,useEffect } from 'react';
+
 
 function Shop() {
       const [products, setProducts] = useState([]);
@@ -79,10 +79,7 @@ function Shop() {
                 /* Products Grid */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <a href={`/product/${product.id}`} key={product.id}>
-                            <ProductCard product={product} />
-                        </a>
-                        
+                        <ProductCard product={product} key={product.id}/>
                     ))}
                 </div>
             )}

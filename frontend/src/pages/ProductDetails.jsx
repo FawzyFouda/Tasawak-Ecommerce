@@ -1,30 +1,32 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ShoppingBag, Heart, Share2, Star, Truck, ShieldCheck, RefreshCw, Plus, Minus } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
-
+import { CartContext } from '../context/CartContext';
 
 function ProductDetails() {
     const [product, setProduct] = useState([]);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
-    const { id  } = useParams()
+    const { id } = useParams()
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-
-
-useEffect(() => {
-    const getProduct = async () => {
-        const response = await axios.get(
-            `${baseUrl}/product/${id}`
-        );
-        console.log(response.data.product[0])
-        setProduct(response.data.product[0])
-    };
-    
-
-    getProduct();
-}, []);
+    const { addToCart, updateQuantity } = useContext(CartContext);
+    useEffect(() => {
+        const getProduct = async () => {
+            const response = await axios.get(
+                `${baseUrl}/product/${id}`
+            );
+            setProduct(response.data.product[0])
+        };
+        getProduct();
+    }, []);
+    useEffect(() => {
+        const handleQuantityCart = () => {
+            updateQuantity(product.id, quantity)
+        };
+        handleQuantityCart()
+    }, [quantity])
 
 
     // في حال لم تتوفر بيانات المنتج بعد
@@ -44,7 +46,10 @@ useEffect(() => {
         } else if (type === 'increase' && quantity < (stock || 10)) {
             setQuantity(quantity + 1);
         }
+
     };
+
+
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
@@ -131,10 +136,7 @@ useEffect(() => {
                             </div>
 
                             <div className="flex gap-3">
-                                <button
-
-                                    className="flex-1 bg-black text-white py-3.5 px-6 rounded text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-600 transition shadow-sm"
-                                >
+                                <button className="flex-1 bg-black text-white py-3.5 px-6 rounded text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-600 transition shadow-sm " onClick={() => addToCart(product)}>
                                     <ShoppingBag size={16} />
                                     Add to Cart
                                 </button>

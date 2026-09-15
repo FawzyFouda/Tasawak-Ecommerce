@@ -1,33 +1,41 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-const CartContext = createContext();
+import { createContext, useState, useEffect } from 'react';
+
+export const CartContext = createContext();
+
 export const CartProvider = ({ children }) => {
-    // قراءة السلة من localstorage عند بداية التشغيل
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem('tasawak_cart');
         return savedCart ? JSON.parse(savedCart) : [];
     });
+    const [wishlist, setWishlist] = useState(() => {
+        const savedCart = localStorage.getItem('tasawak_wishlist');
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
-    // حفظ التعديلات في localstorage تلقائياً عند أي تغيير في السلة
     useEffect(() => {
         localStorage.setItem('tasawak_cart', JSON.stringify(cart));
     }, [cart]);
+    useEffect(() => {
+        localStorage.setItem('tasawak_fav', JSON.stringify(wishlist));
+    }, [wishlist]);
 
-    // 1. إضافة منتج للسلة
+    // تعديل دالة الإضافة لتقبل المنتج والكمية المطلوبة
     const addToCart = (product, quantity = 1) => {
         setCart((prevCart) => {
+            console.log("tttttttttttttttttttttt")
+            console.log(prevCart)
             const existingItem = prevCart.find((item) => item.id === product.id);
+
             if (existingItem) {
-                return prevCart.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                );
+                // إذا كان المنتج موجوداً، نزيد الكمية القديمة بالكمية الجديدة
+                return prevCart.map((item) => item.id === product.id ? { ...item } : item);
             }
-            return [...prevCart, { ...product, quantity }];
+
+            // إذا لم يكن موجوداً، نضيفه كعنصر جديد مع تحديد الكمية
+            return [...prevCart, { ...product, quantity: quantity }];
         });
     };
 
-    // 2. تعديل كمية منتج
     const updateQuantity = (productId, newQuantity) => {
         if (newQuantity <= 0) {
             removeFromCart(productId);
@@ -40,20 +48,30 @@ export const CartProvider = ({ children }) => {
         );
     };
 
-    // 3. حذف منتج معين
     const removeFromCart = (productId) => {
         setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
     };
 
-    // 4. تفريغ السلة بالكامل (بنستخدمها بعد إتمام الشراء)
     const clearCart = () => setCart([]);
 
-    // حساب إجمالي السعر
     const totalAmount = cart.reduce(
         (sum, item) => sum + (item.discount_price || item.price) * item.quantity,
         0
     );
+    const addToWishlist = (product, quantity = 1) => {
+        setWishlist((prevCart) => {
 
+            const existingItem = prevCart.find((item) => item.id === product.id);
+
+            if (existingItem) {
+                // إذا كان المنتج موجوداً، نزيد الكمية القديمة بالكمية الجديدة
+                return prevCart.map((item) => item.id === product.id ? { ...item } : item);
+            }
+
+            // إذا لم يكن موجوداً، نضيفه كعنصر جديد مع تحديد الكمية
+            return [...prevCart, { ...product, quantity: quantity }];
+        });
+    };
     return (
         <CartContext.Provider
             value={{
@@ -62,13 +80,12 @@ export const CartProvider = ({ children }) => {
                 removeFromCart,
                 updateQuantity,
                 clearCart,
-                totalAmount,
+                wishlist,
+                addToWishlist,
+                totalAmount
             }}
         >
             {children}
         </CartContext.Provider>
     );
 };
-
-// Custom Hook لسهولة الاستدعاء في أي المكونات
-export const useCart = () => useContext(CartContext);

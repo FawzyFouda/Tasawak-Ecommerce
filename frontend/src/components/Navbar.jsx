@@ -1,11 +1,14 @@
 import { Search, User, Heart, ShoppingBag, LogOut } from 'lucide-react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CartContext } from '../context/CartContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
   // قراءة بيانات المستخدم المسجل من الـ LocalStorage
   const user = JSON.parse(localStorage.getItem('user'));
-
+const {cart} = useContext(CartContext)
+const itemsCount = cart.reduce((total,item) => total + item.quantity, 0) 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -64,11 +67,11 @@ const Navbar = () => {
   </Link>
 )}
 
-          <button className="hover:text-black transition"><Heart size={20} /></button>
-          <button className="hover:text-black transition relative">
+          <Link className="hover:text-black transition"  to={'/wishlist'}><Heart size={20}/></Link>
+          <Link className="hover:text-black transition relative" to={'/cart'}>
             <ShoppingBag size={20} />
-            <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
-          </button>
+            <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">{itemsCount}</span>
+          </Link>
         </div>
       </div>
     </header>

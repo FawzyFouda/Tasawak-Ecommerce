@@ -9,6 +9,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
 import Shops from './pages/Shops';
 import ProductDetails from './pages/ProductDetails';
+import Cart from './pages/Cart';
+import Wishlist from './pages/Wishlist';
 
 function App() {
   return (
@@ -23,8 +25,8 @@ function App() {
           {/* <Route path="/profile" element={<ProtectedRoute><Cart /></ProtectedRoute>} /> */}
           <Route path="/shop" element={<Shops />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          
-          
+          <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
         </Routes>
       </div>
       <CookieBar />
