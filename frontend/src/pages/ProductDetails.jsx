@@ -3,7 +3,7 @@ import { ShoppingBag, Heart, Share2, Star, Truck, ShieldCheck, RefreshCw, Plus, 
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../context/createContext';
 
 function ProductDetails() {
     const [product, setProduct] = useState([]);

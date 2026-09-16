@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../context/createContext';
 import { useContext } from 'react';
 
 function Wishlist() {

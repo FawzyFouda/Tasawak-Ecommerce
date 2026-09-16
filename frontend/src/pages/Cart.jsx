@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from 'lucide-react';
-import { CartContext } from '../context/CartContext';
 import { useContext } from 'react';
+import { CartContext } from '../context/createContext';
 
 function Cart() {
     const { cart, removeFromCart, updateQuantity, totalAmount, clearCart } = useContext(CartContext)

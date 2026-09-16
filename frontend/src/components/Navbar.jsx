@@ -1,7 +1,7 @@
 import { Search, User, Heart, ShoppingBag, LogOut } from 'lucide-react';
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../context/createContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
