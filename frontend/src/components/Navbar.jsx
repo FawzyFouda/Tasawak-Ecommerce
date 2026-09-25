@@ -26,7 +26,7 @@ const itemsCount = cart.reduce((total,item) => total + item.quantity, 0)
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-3xl font-serif tracking-widest font-bold">
-          Wattie<span className="text-amber-600">.</span>
+          Tasawak<span className="text-amber-600">.</span>
         </Link>
 
         {/* Navigation Links */}
