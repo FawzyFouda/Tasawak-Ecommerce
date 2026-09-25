@@ -12,15 +12,13 @@
 // module.exports = pool.promise();
 
 
-const caPath = process.env.NODE_ENV === 'production'
-    ? '/etc/secrets/ca.pem'
-    : path.join(__dirname, 'ca.pem');
-
 const mysql = require('mysql2');
 const fs = require('fs');
 const path = require('path');
 
 require('dotenv').config();
+
+const caPath = process.env.DB_CA_PATH || path.join(__dirname, 'ca.pem');
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -30,11 +28,13 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
 
     ssl: {
-    ca: fs.readFileSync(caPath)
+    ca: process.env.DB_CA
+        ? Buffer.from(process.env.DB_CA)
+        : fs.readFileSync(caPath)
 },
 
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 5,
     queueLimit: 0
 });
 
