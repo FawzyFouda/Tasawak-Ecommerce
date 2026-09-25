@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 function HeroBanner() {
   return (
-    <section className="relative bg-neutral-950 text-white overflow-hidden bg-[url('./images/banner.webp')] h-[890px]">
+    <section className="relative bg-neutral-950 text-white overflow-hidden bg-[url('/images/banner.webp')] h-[890px]">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24 grid md:grid-cols-2 items-center gap-8">
         {/* Text content */}
         <div className="space-y-5 text-center md:text-left order-2 md:order-1">
