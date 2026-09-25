@@ -9,7 +9,7 @@ const brands = [
 
 function BrandStrip() {
   return (
-    <section className="our_collection max-w-7xl mx-auto px-4 md:px-6 py-12 z-10 relative top-[-50px] h-[320px] bg-[#FFF]">
+    <section className="our_collection max-w-7xl mx-auto px-4 md:px-6 py-12 z-10 relative top-[-50px] bg-[#FFF]">
       <h2 className="title_heading">Our Collection</h2>
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-6">
         {brands.map((brand) => (
