@@ -11,7 +11,7 @@ import Shops from './pages/Shops';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
-
+import { Toaster } from 'react-hot-toast';
 function App() {
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 flex flex-col justify-between">
@@ -30,6 +30,18 @@ function App() {
         </Routes>
       </div>
       <CookieBar />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#000',
+            color: '#fff',
+            fontSize: '12px',
+            borderRadius: '4px',
+            padding: '12px 16px',
+          },
+        }}
+      />
     </div>
   );
 }

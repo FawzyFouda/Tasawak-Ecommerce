@@ -16,13 +16,13 @@ function Cart() {
                     Your Cart is Empty
                 </h2>
                 <p className="text-gray-500 text-sm mb-8">
-                    يبدو أنك لم تقم بطلب أو إضافة أي من منتجاتنا بعد.
+                    It appears that you haven't ordered or added any of our products yet.
                 </p>
                 <Link
                     to="/shop"
                     className="inline-flex items-center gap-2 bg-black text-white px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest hover:bg-amber-600 transition duration-300"
                 >
-                    <span>تصفح المنتجات الآن</span>
+                    <span>Browse products now</span>
                 </Link>
             </div>
         );

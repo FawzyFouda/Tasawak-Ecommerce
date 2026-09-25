@@ -1,21 +1,21 @@
 import {  useState, useEffect } from 'react';
 import { CartContext } from './createContext';
-
+import toast from 'react-hot-toast';
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem('tasawak_cart');
         return savedCart ? JSON.parse(savedCart) : [];
     });
     const [wishlist, setWishlist] = useState(() => {
-        const savedCart = localStorage.getItem('tasawak_wishlist');
-        return savedCart ? JSON.parse(savedCart) : [];
+        const savedWishlist = localStorage.getItem('tasawak_wishlist');
+        return savedWishlist ? JSON.parse(savedWishlist) : [];
     });
 
     useEffect(() => {
         localStorage.setItem('tasawak_cart', JSON.stringify(cart));
     }, [cart]);
     useEffect(() => {
-        localStorage.setItem('tasawak_fav', JSON.stringify(wishlist));
+        localStorage.setItem('tasawak_wishlist', JSON.stringify(wishlist));
     }, [wishlist]);
 
     // تعديل دالة الإضافة لتقبل المنتج والكمية المطلوبة
@@ -33,6 +33,8 @@ export const CartProvider = ({ children }) => {
             // إذا لم يكن موجوداً، نضيفه كعنصر جديد مع تحديد الكمية
             return [...prevCart, { ...product, quantity: quantity }];
         });
+        toast.success(`"${product.name}" has been added to cart successfully`);
+
     };
 
     const updateQuantity = (productId, newQuantity) => {
@@ -49,6 +51,8 @@ export const CartProvider = ({ children }) => {
 
     const removeFromCart = (productId) => {
         setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+        toast.error(`product has been removed from cart successfully`);
+
     };
 
     const clearCart = () => setCart([]);
@@ -70,6 +74,11 @@ export const CartProvider = ({ children }) => {
             // إذا لم يكن موجوداً، نضيفه كعنصر جديد مع تحديد الكمية
             return [...prevCart, { ...product, quantity: quantity }];
         });
+        toast.success(`"${product.name}" has been added to wishlist successfully`);
+    };
+    const removeFromWishlist = (productId) => {
+        setWishlist((prevCart) => prevCart.filter((item) => item.id !== productId));
+        toast.error('product has been removed from wishlist successfully');
     };
     return (
         <CartContext.Provider
@@ -81,6 +90,7 @@ export const CartProvider = ({ children }) => {
                 clearCart,
                 wishlist,
                 addToWishlist,
+                removeFromWishlist,
                 totalAmount
             }}
         >

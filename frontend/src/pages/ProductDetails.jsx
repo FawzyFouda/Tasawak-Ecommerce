@@ -11,7 +11,7 @@ function ProductDetails() {
     const [activeTab, setActiveTab] = useState('description');
     const { id } = useParams()
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-    const { addToCart, updateQuantity } = useContext(CartContext);
+    const { addToCart, updateQuantity, cart } = useContext(CartContext);
     useEffect(() => {
         const getProduct = async () => {
             const response = await axios.get(
@@ -27,6 +27,7 @@ function ProductDetails() {
         };
         handleQuantityCart()
     }, [quantity])
+    const existingItem = cart.some(item => item.id === product.id);
 
 
     // في حال لم تتوفر بيانات المنتج بعد
@@ -136,7 +137,8 @@ function ProductDetails() {
                             </div>
 
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-black text-white py-3.5 px-6 rounded text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-600 transition shadow-sm " onClick={() => addToCart(product)}>
+
+                                <button className={`flex-1 bg-black text-white py-3.5 px-6 rounded text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-amber-600 transition shadow-sm ${existingItem ? "hidden" : "visible"} `} onClick={() => addToCart(product)}>
                                     <ShoppingBag size={16} />
                                     Add to Cart
                                 </button>

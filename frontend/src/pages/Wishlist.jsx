@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Trash2 } from 'lucide-react';
 import { CartContext } from '../context/createContext';
 import { useContext } from 'react';
 
 function Wishlist() {
-    const { wishlist } = useContext(CartContext)
+    const { wishlist, removeFromWishlist } = useContext(CartContext)
     // الشاشة في حالة عدم وجود منتجات
     if (wishlist.length === 0) {
         return (
@@ -16,13 +16,13 @@ function Wishlist() {
                     Your favorite is Empty
                 </h2>
                 <p className="text-gray-500 text-sm mb-8">
-                    يبدو أنك لم تقم بإضافة أي من منتجاتنا بعد.
+                    It seems you haven't added any of our products yet.
                 </p>
                 <Link
                     to="/shop"
                     className="inline-flex items-center gap-2 bg-black text-white px-8 py-3.5 rounded text-xs font-bold uppercase tracking-widest hover:bg-amber-600 transition duration-300"
                 >
-                    <span>تصفح المنتجات الآن</span>
+                    <span>see products now</span>
                 </Link>
             </div>
         );
@@ -67,7 +67,15 @@ function Wishlist() {
                                     <span className="text-sm font-bold text-gray-900">
                                         ${itemTotal.toFixed(2)}
                                     </span>
+                                    <button
+                                        onClick={() => removeFromWishlist(item.id)}
+                                        title="Remove Item"
+                                        className="text-gray-400 hover:text-red-500 transition"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
                                 </div>
+
                             </div>
                         );
                     })}

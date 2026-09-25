@@ -1,30 +1,52 @@
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
-import {  SlidersHorizontal } from 'lucide-react';
-import { useState,useEffect } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 
 function Shop() {
-      const [products, setProducts] = useState([]);
-      const [loading, setLoading] = useState(true);
-    
-      useEffect(() => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-    
-    axios 
-      .get(`${baseUrl}/products`)
-      .then((response) => {
-        if (response.data.success) {
-          setProducts(response.data.products);
-          console.log(products)
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [sortType, setSortType] = useState('featured');
+
+
+    useEffect(() => {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
+        axios
+            .get(`${baseUrl}/products`)
+            .then((response) => {
+                if (response.data.success) {
+                    setProducts(response.data.products);
+                    console.log(products)
+                }
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error fetching products:', error);
+                setLoading(false);
+            });
+    }, []);
+    useEffect(() => {
+        // 1. أخذ نسخة جديدة من المنتجات لتجنب تعديل الـ State الأصلي مباشرة
+        let sortedArray = [...products];
+
+        // 2. فحص الخيار المحدد وترتيب العناصر
+        if (sortType === 'price-low') {
+            // ترتيب من الأقل للأعلى
+            sortedArray.sort((a, b) => (a.discount_price || a.price) - (b.discount_price || b.price));
+        } else if (sortType === 'price-high') {
+            // ترتيب من الأعلى للأقل
+            sortedArray.sort((a, b) => (b.discount_price || b.price) - (a.discount_price || a.price));
+        } else if (sortType === 'newest') {
+            // ترتيب حسب الأحدث عن طريق تاريخ الإنشاء
+            sortedArray.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
         }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-        setLoading(false);
-      });
-  }, []);
+
+        // 3. تحديث قائمة المنتجات المعروضة
+        setFilteredProducts(sortedArray);
+    }, [sortType, products]);
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
 
@@ -53,7 +75,8 @@ function Shop() {
                         <span>Filter</span>
                     </div>
 
-                    <select className="bg-transparent border border-gray-300 rounded px-2 py-1 outline-none focus:border-amber-600 cursor-pointer text-xs">
+                    <select className="bg-transparent border border-gray-300 rounded px-2 py-1 outline-none focus:border-amber-600 cursor-pointer text-xs" value={sortType}
+  onChange={(e) => setSortType(e.target.value)}>
                         <option value="featured">Sort by: Featured</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -78,8 +101,8 @@ function Shop() {
             ) : (
                 /* Products Grid */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {products.map((product) => (
-                        <ProductCard product={product} key={product.id}/>
+                    {filteredProducts.map((product) => (
+                        <ProductCard product={product} key={product.id} />
                     ))}
                 </div>
             )}

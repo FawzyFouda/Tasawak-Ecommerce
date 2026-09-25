@@ -2,7 +2,7 @@ const db = require("../db")
 
 exports.getAllProducts = async (req, res, next) => {
     try {
-        const [products] = await db.query('SELECT * from PRODUCTS')
+        const [products] = await db.query('SELECT * from products')
         if (products.length === 0) {
             return res.json({
                 success: true,
