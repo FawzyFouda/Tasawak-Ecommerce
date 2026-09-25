@@ -12,7 +12,9 @@
 // module.exports = pool.promise();
 
 
-
+const caPath = process.env.NODE_ENV === 'production'
+    ? '/etc/secrets/ca.pem'
+    : path.join(__dirname, 'ca.pem');
 
 const mysql = require('mysql2');
 const fs = require('fs');
@@ -28,8 +30,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
 
     ssl: {
-        ca: fs.readFileSync(path.join(__dirname, 'ca.pem'))
-    },
+    ca: fs.readFileSync(caPath)
+},
 
     waitForConnections: true,
     connectionLimit: 10,
